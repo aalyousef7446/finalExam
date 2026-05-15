@@ -1,0 +1,397 @@
+<!doctype html>
+<html lang="ar" dir="rtl"><head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>نظام لجان الاختبار</title>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Kufi+Arabic:wght@400;500;700&amp;display=swap" rel="stylesheet">
+  <style>
+    * { font-family: 'Noto Kufi Arabic', sans-serif; }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .fade-up { animation: fadeUp 0.6s ease both; }
+    .fade-up-d1 { animation-delay: 0.1s; }
+    .fade-up-d2 { animation-delay: 0.2s; }
+    .fade-up-d3 { animation-delay: 0.3s; }
+
+    .hero-section {
+      position: relative;
+      overflow: hidden;
+      min-height: 380px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .hero-section::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(0,50,80,0.88) 0%, rgba(13,148,136,0.82) 50%, rgba(0,80,100,0.75) 100%);
+      z-index: 1;
+    }
+    .hero-bg-img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .hero-content { position: relative; z-index: 2; }
+
+    .glass-badge {
+      backdrop-filter: blur(12px);
+      background: rgba(255,255,255,0.15);
+      border: 1px solid rgba(255,255,255,0.25);
+    }
+
+    .card-elevated {
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.08), 0 1px 4px rgba(0,0,0,0.04);
+      border: 1px solid rgba(0,0,0,0.04);
+    }
+
+    .input-styled {
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 12px 16px;
+      transition: all 0.2s;
+      background: #f9fafb;
+    }
+    .input-styled:focus {
+      outline: none;
+      border-color: #0d9488;
+      background: #fff;
+      box-shadow: 0 0 0 3px rgba(13,148,136,0.12);
+    }
+
+    .btn-main {
+      background: linear-gradient(135deg, #0d9488, #0f766e);
+      border-radius: 12px;
+      font-weight: 700;
+      transition: all 0.2s;
+      box-shadow: 0 2px 8px rgba(13,148,136,0.3);
+    }
+    .btn-main:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 16px rgba(13,148,136,0.4);
+    }
+    .btn-main:active { transform: translateY(0); }
+
+    .result-card {
+      background: linear-gradient(135deg, #f0fdfa, #ecfdf5);
+      border: 1px solid #99f6e4;
+      border-radius: 14px;
+      padding: 20px;
+      margin-bottom: 12px;
+      transition: transform 0.2s;
+    }
+    .result-card:hover { transform: translateY(-2px); }
+
+    .table-row { transition: background 0.15s; }
+    .table-row:hover { background: #f0fdfa; }
+
+    .dot-pattern {
+      background-image: radial-gradient(circle, rgba(255,255,255,0.06) 1px, transparent 1px);
+      background-size: 24px 24px;
+    }
+
+    .footer-gradient {
+      background: linear-gradient(135deg, #003e64 0%, #0f766e 100%);
+    }
+  </style>
+  <script src="/_sdk/resizing_sdk.js" type="text/javascript"></script>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+ </head>
+ <body data-template-id="__page-root" class="w-full" style="min-height: calc(100 * min(var(--vh, 1vh), 1vh)); background: rgb(240, 253, 250);"><!-- Hero -->
+  <header class="hero-section dot-pattern"><img data-template-id="hero-bg" class="canva-image hero-bg-img" loading="lazy" src="https://images.pexels.com/photos/18404114/pexels-photo-18404114.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=1280" alt="مبنى حديث بتصميم معماري مميز في الرياض">
+   <div class="hero-content text-center px-4 py-16 w-full">
+    <div class="fade-up">
+     <div class="inline-block glass-badge rounded-full px-5 py-2 mb-5">
+      <p data-template-id="school-name" class="canva-text text-sm tracking-wide" style="color: rgb(255, 255, 255); font-weight: 500; font-style: normal; font-size: 13px;">المدرسة الثانوية الثالثة بالخبر للبنات</p>
+     </div>
+    </div>
+    <h1 data-template-id="main-title" class="canva-text font-bold mb-4 fade-up fade-up-d1" style="color: rgb(255, 255, 255); font-weight: 700; font-style: normal; font-size: 32px;">نظام لجان الاختبار</h1>
+    <p data-template-id="subtitle" class="canva-text max-w-xl mx-auto fade-up fade-up-d2" style="color: rgb(204, 251, 241); font-weight: 400; font-style: normal; font-size: 17px;">ابحثي عن لجنتك باستخدام اسمك أو رقم هويتك</p>
+    <div class="mt-8 fade-up fade-up-d3">
+     <div class="inline-flex items-center gap-2 glass-badge rounded-full px-5 py-2"><i data-lucide="search" style="width:18px;height:18px;color:#fff"></i> <span data-template-id="hero-hint" class="canva-text text-sm" style="color: rgb(255, 255, 255); font-weight: 400; font-style: normal; font-size: 16px;">ابدئي البحث الآن</span>
+     </div>
+    </div>
+   </div>
+  </header>
+  <main class="max-w-3xl mx-auto px-4 pb-8"><!-- Legend -->
+   <section data-template-id="legend-section" class="canva-section card-elevated p-6 -mt-10 relative z-10 fade-up" style="background: rgb(255, 255, 255);">
+    <div class="flex items-center gap-3 mb-4">
+     <div class="w-10 h-10 rounded-xl bg-teal-100 flex items-center justify-center flex-shrink-0"><i data-lucide="info" style="width:20px;height:20px;color:#0d9488"></i>
+     </div>
+     <h2 data-template-id="legend-title" class="canva-text font-bold" style="color: rgb(0, 62, 100); font-weight: 700; font-style: normal; font-size: 24px;">توزيع اللجان</h2>
+    </div>
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+     <div class="bg-teal-50 rounded-xl p-3 text-center border border-teal-100">
+      <p data-template-id="legend-line-1" class="canva-text text-sm" style="color: rgb(15, 118, 110); font-weight: 500; font-style: normal; font-size: 16px;">أول ثانوي: اللجان 1 - 6</p>
+     </div>
+     <div class="bg-sky-50 rounded-xl p-3 text-center border border-sky-100">
+      <p data-template-id="legend-line-2" class="canva-text text-sm" style="color: rgb(3, 105, 161); font-weight: 500; font-style: normal; font-size: 16px;">ثاني ثانوي: اللجان 7 - 12</p>
+     </div>
+     <div class="bg-violet-50 rounded-xl p-3 text-center border border-violet-100">
+      <p data-template-id="legend-line-3" class="canva-text text-sm" style="color: rgb(109, 40, 217); font-weight: 500; font-style: normal; font-size: 16px;">ثالث ثانوي: اللجان 13 - 18</p>
+     </div>
+    </div>
+   </section><!-- Search -->
+   <section data-template-id="search-section" class="canva-section card-elevated p-6 mt-6" style="background: rgb(255, 255, 255);">
+    <div class="flex items-center gap-3 mb-4">
+     <div class="w-10 h-10 rounded-xl bg-teal-100 flex items-center justify-center flex-shrink-0"><i data-lucide="search" style="width:20px;height:20px;color:#0d9488"></i>
+     </div><label data-template-id="search-label" for="search-input" class="canva-text font-bold" style="color: rgb(0, 62, 100); font-weight: 700; font-style: normal; font-size: 16px;">البحث عن اللجنة</label>
+    </div>
+    <div class="flex gap-3"><input id="search-input" type="text" data-template-id="search-input" class="canva-input flex-1 input-styled" onkeydown="if(event.key==='Enter'){event.preventDefault();doSearch();}" placeholder="أدخلي الاسم أو رقم الهوية" style="font-weight: 400; font-style: normal; font-size: 16px;"> <button onclick="doSearch()" data-template-id="search-btn" class="canva-button btn-main px-8 py-3 text-white flex items-center gap-2" style="background: linear-gradient(135deg, rgb(13, 148, 136), rgb(15, 118, 110)); color: rgb(255, 255, 255); font-weight: 700; font-style: normal; font-size: 16px;">بحث</button>
+    </div>
+    <div id="search-results" class="mt-5 hidden">
+     <div id="results-list"></div>
+     <div id="result-not-found" class="hidden bg-red-50 border border-red-200 rounded-xl p-5 flex items-center gap-3"><i data-lucide="alert-circle" style="width:20px;height:20px;color:#dc2626"></i>
+      <p data-template-id="not-found-msg" class="canva-text font-bold" style="color: rgb(185, 28, 28); font-weight: 700; font-style: normal; font-size: 16px;">لم يتم العثور على نتيجة، تأكدي من صحة البيانات</p>
+     </div>
+    </div>
+   </section><!-- Admin Toggle -->
+   <div class="mt-6 text-center"><button onclick="showPasswordPrompt()" data-template-id="admin-toggle-btn" class="canva-button btn-main px-6 py-3 text-white inline-flex items-center gap-2" style="background: linear-gradient(135deg, rgb(13, 148, 136), rgb(15, 118, 110)); color: rgb(255, 255, 255); font-weight: 700; font-style: normal; font-size: 16px;">لوحة الإدارة</button>
+   </div><!-- Password Modal -->
+   <div id="password-modal" class="hidden fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+    <div class="card-elevated p-8 w-full max-w-sm fade-up">
+     <div class="w-14 h-14 rounded-2xl bg-teal-100 flex items-center justify-center mx-auto mb-4"><i data-lucide="lock" style="width:24px;height:24px;color:#0d9488"></i>
+     </div>
+     <h3 data-template-id="password-title" class="canva-text font-bold mb-5 text-center" style="color: rgb(17, 24, 39); font-weight: 700; font-style: normal; font-size: 19px;">دخول الإدارة</h3><input id="password-input" type="password" data-template-id="password-input" class="canva-input w-full input-styled mb-4" onkeydown="if(event.key==='Enter'){verifyPassword();}" placeholder="أدخلي كلمة المرور" style="font-weight: 400; font-style: normal; font-size: 16px;">
+     <div class="flex gap-3"><button onclick="verifyPassword()" data-template-id="password-submit" class="canva-button flex-1 btn-main px-4 py-3 text-white" style="background: linear-gradient(135deg, rgb(13, 148, 136), rgb(15, 118, 110)); color: rgb(255, 255, 255); font-weight: 700; font-style: normal; font-size: 16px;">تحقق</button> <button onclick="closePasswordPrompt()" data-template-id="password-cancel" class="canva-button flex-1 px-4 py-3 rounded-xl font-bold transition hover:bg-gray-200" style="background: rgb(243, 244, 246); color: rgb(17, 24, 39); font-weight: 700; font-style: normal; font-size: 16px;">إلغاء</button>
+     </div>
+     <div id="password-error" class="mt-4 text-sm hidden text-red-600 text-center bg-red-50 rounded-lg p-2"></div>
+    </div>
+   </div><!-- Admin Panel -->
+   <section id="admin-panel" class="mt-6 card-elevated p-6 hidden">
+    <div class="flex items-center gap-3 mb-5">
+     <div class="w-10 h-10 rounded-xl bg-teal-100 flex items-center justify-center flex-shrink-0"><i data-lucide="users" style="width:20px;height:20px;color:#0d9488"></i>
+     </div>
+     <h2 data-template-id="admin-title" class="canva-text font-bold" style="color: rgb(0, 62, 100); font-weight: 700; font-style: normal; font-size: 24px;">إدارة بيانات الطالبات</h2>
+    </div>
+    <form id="add-form" class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-4" onsubmit="event.preventDefault(); addStudent();"><input id="f-name" type="text" data-template-id="input-name" class="canva-input input-styled" placeholder="اسم الطالبة" style="font-weight: 400; font-style: normal; font-size: 16px;"> <input id="f-id" type="text" data-template-id="input-id" class="canva-input input-styled" placeholder="رقم الهوية" style="font-weight: 400; font-style: normal; font-size: 16px;"> <input id="f-committee" type="text" data-template-id="input-committee" class="canva-input input-styled" placeholder="رقم اللجنة" style="font-weight: 400; font-style: normal; font-size: 16px;"> <input id="f-location" type="text" data-template-id="input-location" class="canva-input input-styled" placeholder="موقع اللجنة" style="font-weight: 400; font-style: normal; font-size: 16px;">
+    </form><button onclick="addStudent()" data-template-id="add-btn" class="canva-button btn-main px-8 py-3 text-white inline-flex items-center gap-2" style="background: linear-gradient(135deg, rgb(13, 148, 136), rgb(15, 118, 110)); color: rgb(255, 255, 255); font-weight: 700; font-style: normal; font-size: 16px;">إضافة طالبة</button>
+    <div id="add-status" class="mt-3 text-sm hidden rounded-lg p-3"></div>
+    <div class="mt-6 overflow-x-auto">
+     <table class="w-full text-sm">
+      <thead>
+       <tr class="border-b-2 border-teal-100">
+        <th data-template-id="th-name" class="canva-text py-3 text-right font-bold" style="color: rgb(0, 62, 100); font-weight: 700; font-style: normal; font-size: 16px;">الاسم</th>
+        <th data-template-id="th-id" class="canva-text py-3 text-right font-bold" style="color: rgb(0, 62, 100); font-weight: 700; font-style: normal; font-size: 16px;">رقم الهوية</th>
+        <th data-template-id="th-committee" class="canva-text py-3 text-right font-bold" style="color: rgb(0, 62, 100); font-weight: 700; font-style: normal; font-size: 16px;">اللجنة</th>
+        <th data-template-id="th-location" class="canva-text py-3 text-right font-bold" style="color: rgb(0, 62, 100); font-weight: 700; font-style: normal; font-size: 16px;">الموقع</th>
+        <th class="py-3"></th>
+       </tr>
+      </thead>
+      <tbody id="student-table"></tbody>
+     </table>
+     <p id="empty-table" data-template-id="empty-msg" class="canva-text text-center py-8" style="color: rgb(156, 163, 175); font-weight: 400; font-style: normal; font-size: 16px;">لا توجد بيانات بعد</p>
+    </div>
+   </section>
+  </main>
+  <footer class="footer-gradient text-white py-10 px-4 mt-12">
+   <div class="max-w-3xl mx-auto">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-6">
+     <div>
+      <h3 data-template-id="footer-title" class="canva-text font-bold mb-4" style="color: rgb(255, 255, 255); font-weight: 700; font-style: normal; font-size: 19px;">فريق العمل</h3>
+      <div class="space-y-3">
+       <div class="flex items-center gap-2"><i data-lucide="user" style="width:14px;height:14px;opacity:0.7"></i>
+        <p data-template-id="staff-1" class="canva-text text-sm" style="color: rgb(204, 251, 241); font-weight: 400; font-style: normal; font-size: 16px;">أ. رانيه المعيلي - الشؤون الطلابية</p>
+       </div>
+       <div class="flex items-center gap-2"><i data-lucide="user" style="width:14px;height:14px;opacity:0.7"></i>
+        <p data-template-id="staff-2" class="canva-text text-sm" style="color: rgb(204, 251, 241); font-weight: 400; font-style: normal; font-size: 16px;">أ. بنان عسيري - مسؤولة النادي الرقمي</p>
+       </div>
+       <div class="flex items-center gap-2"><i data-lucide="user" style="width:14px;height:14px;opacity:0.7"></i>
+        <p data-template-id="staff-3" class="canva-text text-sm" style="color: rgb(204, 251, 241); font-weight: 400; font-style: normal; font-size: 16px;">أ. أمل اليوسف - مسجلة المعلومات</p>
+       </div>
+      </div>
+     </div>
+     <div class="flex items-center">
+      <div class="bg-white/10 rounded-2xl p-5 border border-white/10">
+       <p data-template-id="footer-note" class="canva-text text-sm leading-relaxed" style="color: rgb(224, 242, 254); font-weight: 400; font-style: normal; font-size: 16px;">نظام لجان الاختبار يوفر إمكانية البحث السريع عن معلومات اللجان للطالبات. جميع البيانات محفوظة وآمنة وفقاً لأعلى معايير الخصوصية.</p>
+      </div>
+     </div>
+    </div>
+    <div class="border-t border-white/15 pt-5 text-center text-xs opacity-50">
+     <p>©️ 2025 نظام لجان الاختبار</p>
+    </div>
+   </div>
+  </footer>
+  <script src="/_sdk/editing_sdk.js"></script>
+  <script>
+    let students = [];
+    let adminAuthenticated = false;
+    const ADMIN_PASSWORD = 'Admin@2025';
+
+    const dataHandler = {
+      onDataChanged(data) {
+        students = data;
+        renderTable();
+      }
+    };
+
+    (async () => {
+      const r = await window.dataSdk.init(dataHandler);
+      if (!r.isOk) {
+        const s = document.getElementById('add-status');
+        s.textContent = 'خطأ في تحميل البيانات';
+        s.className = 'mt-3 text-sm text-red-600 bg-red-50 rounded-lg p-3';
+        s.classList.remove('hidden');
+      }
+      lucide.createIcons();
+    })();
+
+    function renderTable() {
+      const tbody = document.getElementById('student-table');
+      const empty = document.getElementById('empty-table');
+      if (students.length === 0) {
+        tbody.innerHTML = '';
+        empty.classList.remove('hidden');
+        return;
+      }
+      empty.classList.add('hidden');
+      const existing = new Map([...tbody.children].map(r => [r.dataset.bid, r]));
+      const fragment = document.createDocumentFragment();
+      students.forEach(s => {
+        let row = existing.get(s.__backendId);
+        if (row) {
+          row.children[0].textContent = s.student_name;
+          row.children[1].textContent = s.national_id;
+          row.children[2].textContent = s.committee_number;
+          row.children[3].textContent = s.committee_location;
+          existing.delete(s.__backendId);
+        } else {
+          row = document.createElement('tr');
+          row.dataset.bid = s.__backendId;
+          row.className = 'table-row border-b border-gray-100';
+          row.innerHTML = `<td class="py-3 pr-1">${esc(s.student_name)}</td><td class="py-3">${esc(s.national_id)}</td><td class="py-3">${esc(s.committee_number)}</td><td class="py-3">${esc(s.committee_location)}</td><td class="py-3"><button onclick="deleteStudent('${s.__backendId}')" class="text-red-400 hover:text-red-600 hover:bg-red-50 p-1.5 rounded-lg transition"><i data-lucide="trash-2" style="width:16px;height:16px"></i></button></td>`;
+        }
+        fragment.appendChild(row);
+      });
+      existing.forEach(r => r.remove());
+      tbody.innerHTML = '';
+      tbody.appendChild(fragment);
+      lucide.createIcons();
+    }
+
+    function esc(s) { const d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
+
+    function normalize(str) {
+      return str.replace(/[\u0610-\u061A\u064B-\u065F\u0670]/g, '').replace(/[إأآا]/g, 'ا').replace(/ة/g, 'ه').replace(/ى/g, 'ي').trim();
+    }
+
+    function doSearch() {
+      const q = document.getElementById('search-input').value.trim();
+      if (!q) return;
+      const container = document.getElementById('search-results');
+      const resultsList = document.getElementById('results-list');
+      const notFound = document.getElementById('result-not-found');
+      container.classList.remove('hidden');
+      const normalizedQ = normalize(q);
+      const matches = students.filter(s => {
+        const name = normalize(s.student_name || '');
+        const nid = (s.national_id || '').trim();
+        return name.includes(normalizedQ) || nid.includes(q);
+      });
+      if (matches.length > 0) {
+        resultsList.innerHTML = '';
+        notFound.classList.add('hidden');
+        matches.forEach((match, i) => {
+          const div = document.createElement('div');
+          div.className = 'result-card fade-up';
+          div.style.animationDelay = (i * 0.08) + 's';
+          const hiddenId = '*'.repeat(Math.max(0, match.national_id.length - 4)) + match.national_id.slice(-4);
+          div.innerHTML = `<div class="flex items-center gap-3 mb-2"><div class="w-8 h-8 rounded-lg bg-teal-500 text-white flex items-center justify-center text-sm font-bold">${esc(match.committee_number)}</div><p class="text-teal-900 font-bold text-lg">${esc(match.student_name)}</p></div><div class="flex flex-wrap gap-2 mt-3"><span class="inline-flex items-center gap-1 bg-teal-100 text-teal-800 rounded-full px-3 py-1 text-sm"><i data-lucide="hash" style="width:12px;height:12px"></i> لجنة ${esc(match.committee_number)}</span><span class="inline-flex items-center gap-1 bg-sky-100 text-sky-800 rounded-full px-3 py-1 text-sm"><i data-lucide="map-pin" style="width:12px;height:12px"></i> ${esc(match.committee_location)}</span></div><p class="text-gray-400 text-xs mt-3">رقم الهوية: ${esc(hiddenId)}</p>`;
+          resultsList.appendChild(div);
+        });
+        lucide.createIcons();
+      } else {
+        resultsList.innerHTML = '';
+        notFound.classList.remove('hidden');
+      }
+    }
+
+    async function addStudent() {
+      if (!adminAuthenticated) { showPasswordPrompt(); return; }
+      const name = document.getElementById('f-name').value.trim();
+      const id = document.getElementById('f-id').value.trim();
+      const comm = document.getElementById('f-committee').value.trim();
+      const loc = document.getElementById('f-location').value.trim();
+      const status = document.getElementById('add-status');
+      if (!name || !id || !comm || !loc) {
+        status.textContent = 'يرجى تعبئة جميع الحقول';
+        status.className = 'mt-3 text-sm text-red-600 bg-red-50 rounded-lg p-3';
+        status.classList.remove('hidden');
+        return;
+      }
+      if (students.length >= 999) {
+        status.textContent = 'تم الوصول للحد الأقصى (999)';
+        status.className = 'mt-3 text-sm text-red-600 bg-red-50 rounded-lg p-3';
+        status.classList.remove('hidden');
+        return;
+      }
+      const btn = document.querySelector('[data-template-id="add-btn"]');
+      btn.disabled = true; btn.style.opacity = '0.5';
+      const r = await window.dataSdk.create({ student_name: name, national_id: id, committee_number: comm, committee_location: loc });
+      btn.disabled = false; btn.style.opacity = '1';
+      if (r.isOk) {
+        document.getElementById('f-name').value = '';
+        document.getElementById('f-id').value = '';
+        document.getElementById('f-committee').value = '';
+        document.getElementById('f-location').value = '';
+        status.textContent = 'تمت الإضافة بنجاح ✓';
+        status.className = 'mt-3 text-sm text-teal-700 bg-teal-50 rounded-lg p-3 font-bold';
+      } else {
+        status.textContent = 'حدث خطأ، حاول مجدداً';
+        status.className = 'mt-3 text-sm text-red-600 bg-red-50 rounded-lg p-3';
+      }
+      status.classList.remove('hidden');
+    }
+
+    async function deleteStudent(bid) {
+      if (!adminAuthenticated) { showPasswordPrompt(); return; }
+      const s = students.find(x => x.__backendId === bid);
+      if (!s) return;
+      const r = await window.dataSdk.delete(s);
+      if (!r.isOk) {
+        const status = document.getElementById('add-status');
+        status.textContent = 'خطأ في الحذف';
+        status.className = 'mt-3 text-sm text-red-600 bg-red-50 rounded-lg p-3';
+        status.classList.remove('hidden');
+      }
+    }
+
+    function showPasswordPrompt() {
+      document.getElementById('password-modal').classList.remove('hidden');
+      document.getElementById('password-input').focus();
+      document.getElementById('password-error').classList.add('hidden');
+      document.getElementById('password-input').value = '';
+    }
+
+    function closePasswordPrompt() {
+      document.getElementById('password-modal').classList.add('hidden');
+      document.getElementById('password-error').classList.add('hidden');
+      document.getElementById('password-input').value = '';
+    }
+
+    function verifyPassword() {
+      const input = document.getElementById('password-input').value;
+      const errorDiv = document.getElementById('password-error');
+      if (input === ADMIN_PASSWORD) {
+        adminAuthenticated = true;
+        closePasswordPrompt();
+        document.getElementById('admin-panel').classList.remove('hidden');
+      } else {
+        errorDiv.textContent = 'كلمة المرور غير صحيحة';
+        errorDiv.classList.remove('hidden');
+        document.getElementById('password-input').value = '';
+      }
+    }
+  </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9fb907a893149dee',t:'MTc3ODc1MjU1NC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script>
+</body></html>
