@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>حصر الحضور الصباحي</title>
+    <style>
+        :root {
+            --primary: #4a90e2;
+            --success: #2ecc71;
+            --danger: #e74c3c;
+            --dark: #2c3e50;
+            --light: #f8f9fa;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--light);
+            color: var(--dark);
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+        h2 {
+            text-align: center;
+            color: var(--primary);
+            margin-bottom: 25px;
+        }
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-bottom: 25px;
+            text-align: center;
+        }
+        .stat-box {
+            padding: 15px;
+            border-radius: 8px;
+            color: white;
+            font-weight: bold;
+        }
+        .stat-total { background-color: var(--primary); }
+        .stat-present { background-color: var(--success); }
+        .stat-absent { background-color: var(--danger); }
+        
+        .add-employee {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 25px;
+        }
+        input[type="text"] {
+            flex: 1;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            font-size: 16px;
+        }
+        button {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 16px;
+        }
+        .btn-add { background-color: var(--primary); color: white; }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+        th, td {
+            padding: 12px;
+            text-align: right;
+            border-bottom: 1px solid #ddd;
+        }
+        th { background-color: #f1f1f1; }
+        
+        .status-btn {
+            padding: 6px 15px;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        .btn-present { background-color: #e8f8f5; color: var(--success); border: 1px solid var(--success); }
+        .btn-present.active { background-color: var(--success); color: white; }
+        .btn-absent { background-color: #fdeaea; color: var(--danger); border: 1px solid var(--danger); }
+        .btn-absent.active { background-color: var(--danger); color: white; }
+        
+        .actions {
+            margin-top: 25px;
+            display: flex;
+            justify-content: space-between;
+        }
+        .btn-export { background-color: #f39c12; color: white; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>📋 نظام حصر حضور الطابور الصباحي</h2>
+    
+    <!-- صناديق الإحصائيات الفورية -->
+    <div class="stats">
+        <div class="stat-box stat-total">الموظفات: <span id="total-count">0</span></div>
+        <div class="stat-box stat-present">حضور: <span id="present-count">0</span></div>
+        <div class="stat-box stat-absent">غياب: <span id="absent-count">0</span></div>
+    </div>
+
+    <!-- نموذج إضافة موظفة جديدة -->
+    <div class="add-employee">
+        <input type="text" id="emp-name" placeholder="اكتبي اسم الموظفة هنا...">
+        <button class="btn-add" onclick="addEmployee()">إضافة</button>
+    </div>
+
+    <!-- جدول الحصر -->
+    <table>
+        <thead>
+            <tr>
+                <th>اسم الموظفة</th>
+                <th>حالة الحضور بالطابور</th>
+                <th>إجراءات</th>
+            </tr>
+        </thead>
+        <tbody id="employee-list">
+            <!-- يتم توليد الأسماء هنا تلقائياً -->
+        </tbody>
+    </table>
+
+    <!-- أزرار التحكم الإضافية -->
+    <div class="actions">
+        <button class="btn-export" onclick="exportToCSV()">📥 تحميل التقرير (Excel)</button>
+    </div>
+</div>
+
+<script>
+    // مصفوفة لتخزين الموظفات محلياً
+    let employees = JSON.parse(localStorage.getItem('attendance_list')) || [];
+
+    // دالة لتحديث الواجهة والإحصائيات
+    function updateUI() {
+        const list = document.getElementById('employee-list');
+        list.innerHTML = '';
+        
+        let present = 0;
+        let absent = 0;
+
+        employees.forEach((emp, index) => {
+            if(emp.status === 'حاضر') present++;
+            if(emp.status === 'غائب') absent++;
+
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td><strong>${emp.name}</strong></td>
+                <td>
+                    <button class="status-btn btn-present ${emp.status === 'حاضر' ? 'active' : ''}" onclick="toggleStatus(${index}, 'حاضر')">حاضر</button>
+                    <button class="status-btn btn-absent ${emp.status === 'غائب' ? 'active' : ''}" onclick="toggleStatus(${index}, 'غائب')">غائب</button>
+                </td>
+                <td>
+                    <button style="background: none; border: none; color: #e74c3c; cursor: pointer;" onclick="deleteEmployee(${index})">❌ حذف</button>
+                </td>
+            `;
+            list.appendChild(row);
+        });
+
+        document.getElementById('total-count').innerText = employees.length;
+        document.getElementById('present-count').innerText = present;
+        document.getElementById('absent-count').innerText = absent;
+        
+        localStorage.setItem('attendance_list', JSON.stringify(employees));
+    }
+
+    // دالة إضافة موظفة جديدة
+    function addEmployee() {
+        const nameInput = document.getElementById('emp-name');
+        const name = nameInput.value.trim();
+        
+        if (name === '') {
+            alert('الرجاء إدخال اسم الموظفة');
+            return;
+        }
+
+        employees.push({ name: name, status: 'غائب' }); // الحالة الافتراضية غائب حتى يتم تحضيرها
+        nameInput.value = '';
+        updateUI();
+    }
+
+    // دالة تغيير حالة الحضور
+    function toggleStatus(index, status) {
+        employees[index].status = status;
+        updateUI();
+    }
+
+    // دالة حذف موظفة
+    function deleteEmployee(index) {
+        if(confirm('هل أنت متأكد من حذف هذه الموظفة؟')) {
+            employees.splice(index, 1);
+            updateUI();
+        }
+    }
+
+    // دالة تصدير البيانات إلى ملف Excel/CSV
+    function exportToCSV() {
+        if(employees.length === 0) {
+            alert('لا توجد بيانات لتصديرها');
+            return;
+        }
+
+        let csvContent = "\uFEFF"; // لدعم اللغة العربية في إكسل
+        csvContent += "اسم الموظفة,حالة حضور الطابور\n";
+        
+        employees.forEach(emp => {
+            csvContent += `${emp.name},${emp.status}\n`;
+        });
+
+        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+        const link = document.createElement("a");
+        const url = URL.createObjectURL(blob);
+        
+        const date = new Date().toLocaleDateString('ar-EG').replace(/\//g, '-');
+        link.setAttribute("href", url);
+        link.setAttribute("download", `حضور_الطابور_${date}.csv`);
+        link.style.visibility = 'hidden';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+
+    // تشغيل التحديث الأولي عند فتح الصفحة
+    updateUI();
+</script>
+
+</body>
+</html>
